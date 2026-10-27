@@ -6,6 +6,7 @@ import fr.switchback.blocklings.abilities.AbilityHelper;
 import fr.switchback.blocklings.inventories.InventoryBlockling;
 import fr.switchback.blocklings.items.ItemBlockling;
 import fr.switchback.blocklings.Blocklings;
+import fr.switchback.blocklings.items.ItemBlocklingWhistle;
 import fr.switchback.blocklings.network.*;
 import fr.switchback.blocklings.util.BlocklingType;
 import fr.switchback.blocklings.util.helpers.*;
@@ -491,6 +492,12 @@ public class EntityBlockling extends EntityTameable implements IEntityAdditional
         ItemStack stack = player.getHeldItem(hand);
         Item item = stack.getItem();
         boolean isMainHand = hand.equals(EnumHand.MAIN_HAND);
+        if (item instanceof ItemBlocklingWhistle) {
+            if (player.equals(getOwner())) {
+                ItemBlocklingWhistle.setBlockling(stack, this);
+                return true;
+            }
+        }
         if (isMainHand) {
             if (!player.isSneaking()) {
                 if (!isTamed()) {
@@ -608,6 +615,7 @@ public class EntityBlockling extends EntityTameable implements IEntityAdditional
                     ));
                 }
             }
+            ItemBlocklingWhistle.onBlocklingDestroyed(this);
         }
         super.onDeath(cause);
     }

@@ -18,14 +18,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @Mod.EventBusSubscriber(modid = Blocklings.MODID)
 public class BlocklingsItems {
     public static Item itemBlockling;
+    public static Item itemBlocklingWhistle;
 
     public static void init() {
         itemBlockling = new ItemBlockling("blockling");
+        itemBlocklingWhistle = new ItemBlocklingWhistle("blockling_whistle");
     }
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
         event.getRegistry().registerAll(itemBlockling);
+        event.getRegistry().registerAll(itemBlocklingWhistle);
     }
 
     @SubscribeEvent
@@ -42,5 +45,7 @@ public class BlocklingsItems {
                 return new ModelResourceLocation(Blocklings.MODID + ":" + stack.getTagCompound().getString("BlocklingType"), "inventory");
             }
         });
+
+        ModelLoader.setCustomModelResourceLocation(itemBlocklingWhistle, 0, new ModelResourceLocation(itemBlocklingWhistle.getRegistryName(), "inventory"));
     }
 }

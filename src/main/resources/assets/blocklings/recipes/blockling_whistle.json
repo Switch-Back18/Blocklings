@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XX",
+    "#X"
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:red_flower", "data": 32767
+    },
+    "#": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "blocklings:blockling_whistle",
+    "count": 1
+  }
+}

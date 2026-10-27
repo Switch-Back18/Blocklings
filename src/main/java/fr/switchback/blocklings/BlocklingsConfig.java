@@ -112,9 +112,9 @@ public class BlocklingsConfig {
     @Config.Name("Flowers")
     public static String[] flowers = {
             "actuallyadditions:block_black_lotus",
-            "futurmc:cornflower",
-            "futurmc:lily_of_the_valley",
-            "futurmc:wither_rose",
+            "futuremc:cornflower",
+            "futuremc:lily_of_the_valley",
+            "futuremc:wither_rose",
             "natura:bluebells_flower"
     };
 

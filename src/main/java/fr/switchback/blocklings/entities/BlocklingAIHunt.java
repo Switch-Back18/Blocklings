@@ -74,6 +74,11 @@ public class BlocklingAIHunt extends EntityAIBase {
         } else if (!entitylivingbase.isEntityAlive()) {
             return false;
         } else {
+            if(entitylivingbase instanceof EntityTameable) {
+                EntityTameable tameable = (EntityTameable) entitylivingbase;
+                if(tameable.isTamed())
+                    return false;
+            }
             if (canPenalize) {
                 if (--this.delayCounter <= 0) {
                     this.path = this.blockling.getNavigator().getPathToEntityLiving(entitylivingbase);

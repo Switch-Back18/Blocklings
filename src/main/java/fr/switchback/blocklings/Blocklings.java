@@ -1,6 +1,7 @@
 package fr.switchback.blocklings;
 
 import fr.switchback.blocklings.events.AttackEventHandler;
+import fr.switchback.blocklings.events.BlocklingPickupHandler;
 import fr.switchback.blocklings.events.BlocklingsConfigHandler;
 import fr.switchback.blocklings.events.FirstSpawnEventHandler;
 import fr.switchback.blocklings.guis.GuiHandler;
@@ -38,6 +39,7 @@ public class Blocklings {
         MinecraftForge.EVENT_BUS.register(new AttackEventHandler());
         MinecraftForge.EVENT_BUS.register(new FirstSpawnEventHandler());
         MinecraftForge.EVENT_BUS.register(new BlocklingsConfigHandler());
+        MinecraftForge.EVENT_BUS.register(new BlocklingPickupHandler());
         ConfigManager.sync(Blocklings.MODID, Config.Type.INSTANCE);
         proxy.preInit(event);
     }

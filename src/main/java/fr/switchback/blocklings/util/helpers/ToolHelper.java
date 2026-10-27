@@ -53,7 +53,7 @@ public class ToolHelper {
 
     public static boolean isWeapon(Item item) {
         if (item == null || item == Items.AIR) return false;
-        if (weapons.contains(item) || item instanceof ItemSword || isItemInList(item, BlocklingsConfig.swords))
+        if (weapons.contains(item) || item instanceof ItemSword || BlocklingsConfig.isItemInList(item, BlocklingsConfig.swords))
             return true;
         ItemStack stack = new ItemStack(item);
         if (!stack.isEmpty()) {
@@ -69,7 +69,7 @@ public class ToolHelper {
 
     public static boolean isPickaxe(Item item) {
         if (item == null || item == Items.AIR) return false;
-        if (pickaxes.contains(item) || item instanceof ItemPickaxe || isItemInList(item, BlocklingsConfig.pickaxes))
+        if (pickaxes.contains(item) || item instanceof ItemPickaxe || BlocklingsConfig.isItemInList(item, BlocklingsConfig.pickaxes))
             return true;
         ItemStack stack = new ItemStack(item);
         if (!stack.isEmpty()) {
@@ -85,7 +85,7 @@ public class ToolHelper {
 
     public static boolean isAxe(Item item) {
         if (item == null || item == Items.AIR) return false;
-        if (axes.contains(item) || item instanceof ItemAxe || isItemInList(item, BlocklingsConfig.axes)) return true;
+        if (axes.contains(item) || item instanceof ItemAxe || BlocklingsConfig.isItemInList(item, BlocklingsConfig.axes)) return true;
         ItemStack stack = new ItemStack(item);
         if (!stack.isEmpty()) {
             for (int id : OreDictionary.getOreIDs(stack)) {
@@ -100,7 +100,7 @@ public class ToolHelper {
 
     public static boolean isHoe(Item item) {
         if (item == null || item == Items.AIR) return false;
-        if (hoes.contains(item) || item instanceof ItemHoe || isItemInList(item, BlocklingsConfig.hoes)) return true;
+        if (hoes.contains(item) || item instanceof ItemHoe || BlocklingsConfig.isItemInList(item, BlocklingsConfig.hoes)) return true;
         ItemStack stack = new ItemStack(item);
         if (!stack.isEmpty()) {
             for (int id : OreDictionary.getOreIDs(stack)) {
@@ -202,18 +202,6 @@ public class ToolHelper {
             }
         }
         return enchantmentList;
-    }
-
-    public static boolean isItemInList(Item item, String[] configList) {
-        if (item == null) {
-            return false;
-        }
-        ResourceLocation registryName = item.getRegistryName();
-        if (registryName == null) {
-            return false;
-        }
-        String itemId = registryName.toString();
-        return Arrays.asList(configList).contains(itemId);
     }
 
     public enum Enchantment {

@@ -1,6 +1,10 @@
 package fr.switchback.blocklings;
 
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Config;
+
+import java.util.Arrays;
 
 @Config(modid = Blocklings.MODID, name = "blocklings-config", type = Config.Type.INSTANCE)
 public class BlocklingsConfig {
@@ -103,4 +107,26 @@ public class BlocklingsConfig {
             "roots:living_axe",
             "astralsorcery:itemcrystalaxe"
     };
+
+    @Config.Comment("List of Flower (format: modid:item)")
+    @Config.Name("Flowers")
+    public static String[] flowers = {
+            "actuallyadditions:block_black_lotus",
+            "futurmc:cornflower",
+            "futurmc:lily_of_the_valley",
+            "futurmc:wither_rose",
+            "natura:bluebells_flower"
+    };
+
+    public static boolean isItemInList(Item item, String[] configList) {
+        if (item == null) {
+            return false;
+        }
+        ResourceLocation registryName = item.getRegistryName();
+        if (registryName == null) {
+            return false;
+        }
+        String itemId = registryName.toString();
+        return Arrays.asList(configList).contains(itemId);
+    }
 }

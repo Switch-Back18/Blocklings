@@ -1,5 +1,6 @@
 package fr.switchback.blocklings.util.helpers;
 
+import fr.switchback.blocklings.BlocklingsConfig;
 import fr.switchback.blocklings.util.BlocklingType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
@@ -17,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ItemHelper {
-    // SAPLINGS
     public static HashMap<IBlockState, ItemStack> saplings = new HashMap<>();
     private static List<ItemStack> upgradeMaterials = new ArrayList<ItemStack>();
 
@@ -42,7 +42,7 @@ public class ItemHelper {
         }
 
         Block block = Block.getBlockFromItem(item);
-        if (block instanceof BlockFlower) {
+        if (block instanceof BlockFlower || BlocklingsConfig.isItemInList(item, BlocklingsConfig.flowers)) {
             return true;
         }
 
@@ -72,7 +72,6 @@ public class ItemHelper {
         if (saplings.containsKey(logState)) {
             return saplings.get(logState).copy();
         }
-
         Block block = logState.getBlock();
         if (block instanceof BlockLog) {
             ItemStack logStack = new ItemStack(block, 1, block.getMetaFromState(logState));
@@ -81,7 +80,6 @@ public class ItemHelper {
                 String oreName = OreDictionary.getOreName(id);
                 if (oreName != null && oreName.startsWith("log")) {
                     String woodSuffix = oreName.substring(3); // ex: "Maple"
-
                     ItemStack sapling = findSaplingBySuffix(woodSuffix);
                     if (!sapling.isEmpty()) {
                         return sapling;
@@ -89,7 +87,6 @@ public class ItemHelper {
                 }
             }
         }
-
         return ItemStack.EMPTY;
     }
 
@@ -105,6 +102,4 @@ public class ItemHelper {
         }
         return ItemStack.EMPTY;
     }
-
-    // END SAPLINGS
 }

@@ -1,0 +1,16 @@
+[
+    {
+      "modid": "${modid}",
+      "name": "${name}",
+      "description": "Adds tameable creatures that can fight, mine, chop and farm.",
+      "version": "${version}",
+      "mcversion": "${mcversion}",
+      "url": "",
+      "updateUrl": "",
+      "authorList": ["SwithBack, WillR27"],
+      "credits": "Thanks for WillR27 for the idad.",
+      "logoFile": "",
+      "screenshots": [],
+      "dependencies": []
+}
+]

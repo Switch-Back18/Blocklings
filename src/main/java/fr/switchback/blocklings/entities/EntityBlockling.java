@@ -13,6 +13,7 @@ import fr.switchback.blocklings.util.helpers.GuiHelper.Tab;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.BlockCrops;
+import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -43,6 +44,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
@@ -315,15 +317,13 @@ public class EntityBlockling extends EntityTameable implements IEntityAdditional
         farmingAbilities.writeToNBT(c);
         c.setInteger("SkillPoints", skillPoints);
         NBTTagList nbttaglist = new NBTTagList();
-        if (generalAbilities.isAbilityAcquired(AbilityHelper.armadillo)) {
-            for (int i = 0; i < this.inv.getSizeInventory(); i++) {
-                ItemStack itemstack = this.inv.getStackInSlot(i);
-                if (itemstack != null && !itemstack.isEmpty()) {
-                    NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-                    nbttagcompound1.setByte("slot", (byte) i);
-                    itemstack.writeToNBT(nbttagcompound1);
-                    nbttaglist.appendTag(nbttagcompound1);
-                }
+        for (int i = 0; i < this.inv.getSizeInventory(); i++) {
+            ItemStack itemstack = this.inv.getStackInSlot(i);
+            if (itemstack != null && !itemstack.isEmpty()) {
+                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+                nbttagcompound1.setByte("slot", (byte) i);
+                itemstack.writeToNBT(nbttagcompound1);
+                nbttaglist.appendTag(nbttagcompound1);
             }
         }
         c.setTag("items", nbttaglist);
@@ -579,6 +579,15 @@ public class EntityBlockling extends EntityTameable implements IEntityAdditional
     @Override
     public void onDeath(DamageSource cause) {
         if (!world.isRemote) {
+            if (!generalAbilities.isAbilityAcquired(AbilityHelper.armadillo)) {
+                for (int i = 0; i < this.inv.getSizeInventory(); i++) {
+                    ItemStack stack = this.inv.getStackInSlot(i);
+                    if (!stack.isEmpty()) {
+                        this.entityDropItem(stack, 0.0f);
+                        this.inv.setInventorySlotContents(i, ItemStack.EMPTY);
+                    }
+                }
+            }
             ItemStack blocklingStack = ItemBlockling.createStack(this);
             NBTTagCompound itemNBT = new NBTTagCompound();
             this.writeEntityToNBT(itemNBT);
@@ -593,15 +602,11 @@ public class EntityBlockling extends EntityTameable implements IEntityAdditional
                     }
                     player.sendMessage(new TextComponentString("Your Blockling has died and has returned to your inventory !"));
                 } else {
-                    EntityItem entityItem = new EntityItem(player.world, player.posX + 0.5, player.posY + 0.5, player.posZ + 0.5, blocklingStack);
-                    entityItem.setPickupDelay(40);
-                    world.spawnEntity(entityItem);
+                    BlockPos pos = this.getPosition();
+                    world.spawnEntity(new net.minecraft.entity.item.EntityItem(
+                            world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, blocklingStack
+                    ));
                 }
-            } else {
-                BlockPos pos = this.getPosition();
-                world.spawnEntity(new net.minecraft.entity.item.EntityItem(
-                        world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, blocklingStack
-                ));
             }
         }
         super.onDeath(cause);
@@ -763,14 +768,7 @@ public class EntityBlockling extends EntityTameable implements IEntityAdditional
 
     @Override
     protected void dropEquipment(boolean wasRecentlyHit, int lootingModifier) {
-        if (!generalAbilities.isAbilityAcquired(AbilityHelper.armadillo)) {
-            for (int i = 0; i < inv.getSizeInventory(); i++) {
-                ItemStack stack = inv.getStackInSlot(i);
-                if (!stack.isEmpty()) {
-                    entityDropItem(stack, 0.0f);
-                }
-            }
-        }
+        super.dropEquipment(wasRecentlyHit, lootingModifier);
     }
 
     @Override

@@ -1,8 +1,6 @@
 package fr.switchback.blocklings.items;
 
-import fr.switchback.blocklings.Blocklings;
 import fr.switchback.blocklings.entities.EntityBlockling;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -13,12 +11,13 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -74,7 +73,7 @@ public class ItemBlocklingWhistle extends Item {
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
         if (world instanceof WorldServer) {
             WorldServer serverWorld = (WorldServer) world;
@@ -94,7 +93,7 @@ public class ItemBlocklingWhistle extends Item {
                 }
             }
         }
-        return EnumActionResult.FAIL;
+        return ActionResult.newResult(EnumActionResult.FAIL, stack);
     }
 
     @Override
@@ -102,7 +101,7 @@ public class ItemBlocklingWhistle extends Item {
         super.onUsingTick(stack, player, count);
         if (stack.hasTagCompound() && stack.getTagCompound().getUniqueId(BLOCKLING_UUID_KEY) != null) {
             if (player.world.isRemote) {
-                EntityBlockling blockling = findBlockling(stack, (WorldClient) player.world);
+                EntityBlockling blockling = findBlockling(stack, player.world);
                 if (blockling != null) {
                     addStackToMap(blockling, stack);
                 }
@@ -122,11 +121,23 @@ public class ItemBlocklingWhistle extends Item {
 
     @SideOnly(Side.CLIENT)
     @Nullable
-    private EntityBlockling findBlockling(@Nonnull ItemStack stack, @Nonnull WorldClient world) {
-        if (stack.hasTagCompound() && stack.getTagCompound().getUniqueId(BLOCKLING_UUID_KEY) != null) {
-            Int2ObjectMap<Entity> entitiesById = ObfuscationReflectionHelper.getPrivateValue(WorldClient.class, world, "field_217429_b");
-            Entity blockling = entitiesById.values().stream().filter(e -> e.getUniqueID().equals(stack.getTagCompound().getUniqueId(BLOCKLING_UUID_KEY))).findFirst().orElse(null);
-            return (EntityBlockling) blockling;
+    private EntityBlockling findBlockling(@Nonnull ItemStack stack, @Nonnull World world) {
+        if (stack.hasTagCompound()) {
+            NBTTagCompound nbt = stack.getTagCompound();
+            String mostKey = BLOCKLING_UUID_KEY + "Most";
+            String leastKey = BLOCKLING_UUID_KEY + "Least";
+            if (nbt.hasKey(mostKey) && nbt.hasKey(leastKey)) {
+                long most = nbt.getLong(mostKey);
+                long least = nbt.getLong(leastKey);
+                UUID uuid = new UUID(most, least);
+                for (Entity entity : world.loadedEntityList) {
+                    if (entity.getUniqueID().equals(uuid)) {
+                        if (entity instanceof EntityBlockling) {
+                            return (EntityBlockling) entity;
+                        }
+                    }
+                }
+            }
         }
         return null;
     }
@@ -137,9 +148,7 @@ public class ItemBlocklingWhistle extends Item {
         EntityBlockling blockling = findBlockling(stack, world);
         if (blockling != null) {
             String customName = blockling.getCustomNameTag();
-            if (customName != null) {
-                return customName;
-            }
+            return customName;
         }
         return null;
     }
@@ -160,5 +169,17 @@ public class ItemBlocklingWhistle extends Item {
             return TextFormatting.LIGHT_PURPLE + "(" + stack.getTagCompound().getString(BLOCKLING_NAME_KEY) + ") Whistle";
         }
         return super.getItemStackDisplayName(stack);
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
+        if (world != null) {
+            String location = findBlocklingLocation(stack, (WorldClient) world);
+            if (location != null) {
+                String translatedKey = net.minecraft.util.text.translation.I18n.translateToLocal(this.getUnlocalizedName() + ".location");
+                tooltip.add(TextFormatting.GREEN + translatedKey + location);
+            }
+        }
+        super.addInformation(stack, world, tooltip, flag);
     }
 }

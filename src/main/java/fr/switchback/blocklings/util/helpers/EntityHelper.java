@@ -1,6 +1,7 @@
 package fr.switchback.blocklings.util.helpers;
 
 import fr.switchback.blocklings.Blocklings;
+import fr.switchback.blocklings.BlocklingsConfig;
 import fr.switchback.blocklings.entities.BlocklingEntityItem;
 import fr.switchback.blocklings.entities.EntityBlockling;
 import fr.switchback.blocklings.render.RenderBlockling;
@@ -41,17 +42,17 @@ public class EntityHelper {
                 true
         );
 
-        //Removed Natural spawn
-        /*
-        EntityRegistry.addSpawn(EntityBlockling.class, 10, 1, 2, net.minecraft.entity.EnumCreatureType.CREATURE,
-            net.minecraft.init.Biomes.PLAINS,
-            net.minecraft.init.Biomes.FOREST,
-            net.minecraft.init.Biomes.FOREST_HILLS,
-            net.minecraft.init.Biomes.REDWOOD_TAIGA,
-            net.minecraft.init.Biomes.ROOFED_FOREST,
-            net.minecraft.init.Biomes.TAIGA,
-            net.minecraft.init.Biomes.TAIGA_HILLS
-        );*/
+        if(BlocklingsConfig.naturalSpawn) {
+            EntityRegistry.addSpawn(EntityBlockling.class, 10, 1, 2, net.minecraft.entity.EnumCreatureType.CREATURE,
+                    net.minecraft.init.Biomes.PLAINS,
+                    net.minecraft.init.Biomes.FOREST,
+                    net.minecraft.init.Biomes.FOREST_HILLS,
+                    net.minecraft.init.Biomes.REDWOOD_TAIGA,
+                    net.minecraft.init.Biomes.ROOFED_FOREST,
+                    net.minecraft.init.Biomes.TAIGA,
+                    net.minecraft.init.Biomes.TAIGA_HILLS
+            );
+        }
     }
 
     @SideOnly(Side.CLIENT)

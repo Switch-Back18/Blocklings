@@ -8,6 +8,10 @@ import java.util.Arrays;
 
 @Config(modid = Blocklings.MODID, name = "blocklings-config", type = Config.Type.INSTANCE)
 public class BlocklingsConfig {
+    @Config.Comment("Blocklings spawn naturally ?")
+    @Config.Name("Spawn")
+    public static boolean naturalSpawn = false;
+
     @Config.Comment("List of Sword (format: modid:item)")
     @Config.Name("Swords")
     public static String[] swords = {

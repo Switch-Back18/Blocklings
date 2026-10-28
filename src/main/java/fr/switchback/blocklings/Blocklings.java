@@ -37,9 +37,10 @@ public class Blocklings {
         NetworkHelper.registerMessages();
         NetworkRegistry.INSTANCE.registerGuiHandler(Blocklings.instance, new GuiHandler());
         MinecraftForge.EVENT_BUS.register(new AttackEventHandler());
-        MinecraftForge.EVENT_BUS.register(new FirstSpawnEventHandler());
         MinecraftForge.EVENT_BUS.register(new BlocklingsConfigHandler());
         MinecraftForge.EVENT_BUS.register(new BlocklingPickupHandler());
+        if(!BlocklingsConfig.naturalSpawn)
+            MinecraftForge.EVENT_BUS.register(new FirstSpawnEventHandler());
         ConfigManager.sync(Blocklings.MODID, Config.Type.INSTANCE);
         proxy.preInit(event);
     }

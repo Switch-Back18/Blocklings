@@ -17,7 +17,7 @@ import java.util.Random;
 
 public class AttackEventHandler {
     @SubscribeEvent
-    public void e(LivingDropsEvent e) {
+    public void AttackEvent(LivingDropsEvent e) {
         EntityLivingBase damagee = e.getEntityLiving();
         if ((e.getSource().getTrueSource() instanceof EntityBlockling)) {
             e.setCanceled(true);

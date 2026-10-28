@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@Mod.EventBusSubscriber(modid = Blocklings.MODID)
 public class BlocklingPickupHandler {
     private static final Map<UUID, Long> MESSAGE_COOLDOWNS = new HashMap<>();
 

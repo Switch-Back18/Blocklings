@@ -4,6 +4,7 @@ import fr.switchback.blocklings.entities.EntityBlockling;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -73,6 +74,15 @@ public class ItemBlocklingWhistle extends Item {
     }
 
     @Override
+    public boolean hasEffect(ItemStack stack) {
+        NBTTagCompound stackTag = stack.getTagCompound();
+        if(stackTag != null) {
+            return !stackTag.getString(BLOCKLING_NAME_KEY).isEmpty();
+        }
+        return super.hasEffect(stack);
+    }
+
+    @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
         if (world instanceof WorldServer) {
@@ -85,7 +95,7 @@ public class ItemBlocklingWhistle extends Item {
                     if (entity instanceof EntityBlockling) {
                         EntityBlockling blockling = (EntityBlockling) entity;
                         if (player == blockling.getOwner()) {
-                            blockling.attemptTeleport(player.posX, player.posY, player.posZ);
+                            blockling.setLocationAndAngles(player.posX, player.posY, player.posZ, player.cameraYaw, player.cameraPitch);
                             stack.damageItem(1, player);
                             serverWorld.playSound(null, player.getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 1.0f, 1.5f);
                         }
@@ -165,8 +175,10 @@ public class ItemBlocklingWhistle extends Item {
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        if (stack.hasTagCompound() && stack.getTagCompound().getString(BLOCKLING_NAME_KEY) != null) {
-            return TextFormatting.LIGHT_PURPLE + "(" + stack.getTagCompound().getString(BLOCKLING_NAME_KEY) + ") Whistle";
+        if (stack.hasTagCompound()) {
+            if (!stack.getTagCompound().getString(BLOCKLING_NAME_KEY).isEmpty()) {
+                return TextFormatting.LIGHT_PURPLE + stack.getTagCompound().getString(BLOCKLING_NAME_KEY) + " Whistle";
+            }
         }
         return super.getItemStackDisplayName(stack);
     }

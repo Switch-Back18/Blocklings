@@ -1,10 +1,8 @@
 package fr.switchback.blocklings.items;
 
-import fr.switchback.blocklings.Blocklings;
 import fr.switchback.blocklings.entities.BlocklingEntityItem;
 import fr.switchback.blocklings.entities.EntityBlockling;
 import fr.switchback.blocklings.util.helpers.EntityHelper;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;

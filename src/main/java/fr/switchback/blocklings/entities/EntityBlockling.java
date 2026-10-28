@@ -610,9 +610,7 @@ public class EntityBlockling extends EntityTameable implements IEntityAdditional
                     player.sendMessage(new TextComponentString("Your Blockling has died and has returned to your inventory !"));
                 } else {
                     BlockPos pos = this.getPosition();
-                    world.spawnEntity(new net.minecraft.entity.item.EntityItem(
-                            world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, blocklingStack
-                    ));
+                    world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, blocklingStack));
                 }
             }
             ItemBlocklingWhistle.onBlocklingDestroyed(this);

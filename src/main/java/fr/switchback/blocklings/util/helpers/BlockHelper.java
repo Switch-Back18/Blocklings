@@ -120,7 +120,17 @@ public class BlockHelper {
                 return true;
             }
         }
-        return block instanceof BlockCrops || (block instanceof BlockBush && !(block instanceof BlockFlower) && !(block instanceof BlockMushroom));
+        return block instanceof BlockCrops
+                || (block instanceof BlockBush
+                && !(block instanceof BlockFlower)
+                && !(block instanceof BlockMushroom)
+                && !(block instanceof BlockTallGrass)
+                && !(block instanceof BlockDoublePlant)
+                && !(block instanceof BlockLilyPad)
+                && !(block instanceof BlockSapling)
+                && !(block instanceof BlockStem)
+                && !(block instanceof BlockDeadBush)
+        );
     }
 
     public static Item getSeed(Block block) {

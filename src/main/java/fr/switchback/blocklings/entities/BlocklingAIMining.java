@@ -155,7 +155,7 @@ public class BlocklingAIMining extends BlocklingAIGatherBase {
     }
 
     private void mineTarget() {
-        NonNullList<ItemStack> dropStacks = DropHelper.getDops(blockling, world, targetPos);
+        NonNullList<ItemStack> dropStacks = DropHelper.getDrops(blockling, world, targetPos);
         for (ItemStack dropStack : dropStacks) {
             if (blockling.miningAbilities.isAbilityAcquired(AbilityHelper.blocksmith)) {
                 ItemStack smeltResult = DropHelper.getFurnaceResult(blockling, dropStack);

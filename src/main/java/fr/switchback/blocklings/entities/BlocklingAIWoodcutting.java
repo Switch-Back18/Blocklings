@@ -174,7 +174,7 @@ public class BlocklingAIWoodcutting extends BlocklingAIGatherBase {
                         Block surroundingBlock = getBlockFromPos(surroundingPos);
                         if (BlockHelper.isLeaf(surroundingBlock)) {
                             if (blockling.woodcuttingAbilities.isAbilityAcquired(AbilityHelper.treeSurgeon)) {
-                                NonNullList<ItemStack> dropStacks = DropHelper.getDops(blockling, world, surroundingPos);
+                                NonNullList<ItemStack> dropStacks = DropHelper.getDrops(blockling, world, surroundingPos);
                                 for (ItemStack dropStack : dropStacks) {
                                     ItemStack leftoverStack = blockling.inv.addItem(dropStack);
                                     if (!leftoverStack.isEmpty()) {
@@ -189,7 +189,7 @@ public class BlocklingAIWoodcutting extends BlocklingAIGatherBase {
             }
         }
 
-        NonNullList<ItemStack> dropStacks = DropHelper.getDops(blockling, world, logPos);
+        NonNullList<ItemStack> dropStacks = DropHelper.getDrops(blockling, world, logPos);
         for (ItemStack dropStack : dropStacks) {
             if (blockling.woodcuttingAbilities.isAbilityAcquired(AbilityHelper.forestFire)) {
                 dropStack = new ItemStack(Items.COAL, dropStack.getCount(), 1);

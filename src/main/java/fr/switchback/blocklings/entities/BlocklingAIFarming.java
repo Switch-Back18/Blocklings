@@ -148,7 +148,7 @@ public class BlocklingAIFarming extends BlocklingAIGatherBase {
                         if (BlockHelper.isCrop(surroundingBlock)) {
                             IBlockState surroundingState = world.getBlockState(surroundingPos);
                             if (BlockHelper.isGrown(surroundingState)) {
-                                NonNullList<ItemStack> dropStacks = DropHelper.getDops(blockling, world, surroundingPos);
+                                NonNullList<ItemStack> dropStacks = DropHelper.getDrops(blockling, world, surroundingPos);
                                 for (ItemStack dropStack : dropStacks) {
                                     if (blockling.farmingAbilities.isAbilityAcquired(AbilityHelper.plentifulHarvest) && rand.nextFloat() <= 0.5f) {
                                         if (!(dropStack.getItem() instanceof ItemBlock)) {
@@ -184,7 +184,7 @@ public class BlocklingAIFarming extends BlocklingAIGatherBase {
                 }
             }
         }
-        NonNullList<ItemStack> dropStacks = DropHelper.getDops(blockling, world, targetPos);
+        NonNullList<ItemStack> dropStacks = DropHelper.getDrops(blockling, world, targetPos);
         for (ItemStack dropStack : dropStacks) {
             if (blockling.farmingAbilities.isAbilityAcquired(AbilityHelper.plentifulHarvest) && rand.nextFloat() <= 0.5f) {
                 if (!(dropStack.getItem() instanceof ItemBlock)) {

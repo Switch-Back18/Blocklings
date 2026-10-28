@@ -18,7 +18,7 @@ import java.util.Random;
 public class DropHelper {
     private static final Random rand = new Random();
 
-    public static NonNullList<ItemStack> getDops(EntityBlockling blockling, World world, BlockPos blockPos) {
+    public static NonNullList<ItemStack> getDrops(EntityBlockling blockling, World world, BlockPos blockPos) {
         NonNullList<ItemStack> dropStacks = NonNullList.create();
 
         ItemStack mainStack = blockling.getHeldItemMainhand();

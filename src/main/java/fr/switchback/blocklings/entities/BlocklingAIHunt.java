@@ -46,9 +46,13 @@ public class BlocklingAIHunt extends EntityAIBase {
         for (int j2 = 0; j2 < list.size(); ++j2) {
             T t1 = list.get(j2);
             EntityLivingBase entitylivingbase = (EntityLivingBase) t1;
-            boolean isTargetValid = (entitylivingbase instanceof EntityAnimal || entitylivingbase instanceof IMob)
-                    && !(entitylivingbase instanceof EntityPlayer)
-                    && entitylivingbase != blockling;
+            boolean isTargetValid = (entitylivingbase instanceof EntityAnimal
+                                    || entitylivingbase instanceof IMob)
+                                    && !(entitylivingbase instanceof EntityPlayer)
+                                    && entitylivingbase != blockling
+                                    && !(entitylivingbase instanceof EntityTameable)
+                                    && !(entitylivingbase.hasCustomName())
+                                    && !(entitylivingbase instanceof AbstractHorse);
             if (isTargetValid) {
                 double d1 = closestTo.getDistanceSq(t1);
                 if (d1 <= d0) {
@@ -68,17 +72,11 @@ public class BlocklingAIHunt extends EntityAIBase {
         Vec3d corner2 = blocklingVec.addVector(20, 10, 20);
         EntityLivingBase entitylivingbase = findNearestEntityWithinAABB(EntityLivingBase.class, new AxisAlignedBB(corner1.x, corner1.y, corner1.z, corner2.x, corner2.y, corner2.z), blockling);
         blockling.setAttackTarget(entitylivingbase);
-
         if (entitylivingbase == null) {
             return false;
         } else if (!entitylivingbase.isEntityAlive()) {
             return false;
         } else {
-            if(entitylivingbase instanceof EntityTameable) {
-                EntityTameable tameable = (EntityTameable) entitylivingbase;
-                if(tameable.isTamed())
-                    return false;
-            }
             if (canPenalize) {
                 if (--this.delayCounter <= 0) {
                     this.path = this.blockling.getNavigator().getPathToEntityLiving(entitylivingbase);
